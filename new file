@@ -1,0 +1,168 @@
+var products = [
+    { "id": 101, "name": "Basket Ball", "image": "./images/basketball.png", "price": 150 },
+    { "id": 102, "name": "Football", "image": "./images/football.png", "price": 120 },
+    { "id": 103, "name": "Soccer", "image": "./images/soccer.png", "price": 110 },
+    { "id": 104, "name": "Table Tennis", "image": "./images/table-tennis.png", "price": 130 },
+    { "id": 105, "name": "Tennis", "image": "./images/tennis.png", "price": 100 }];
+let cart = [];
+$(document).ready(function () {
+    let str = "";
+    let i = 0;
+    products.forEach(element => {
+        str += "<div class='product'><img src='" + element.image + "'></img><h3 class='title' href='#'>" + element.name + "</h3><span>" + "$" + element.price + "</span><a class='add-to-cart' href='#' id='" + i + "' onclick='addToCart(this.id)'>" + "Add to cart" + "</a></div>";
+        i++;
+    });
+    $("#products").html(str);
+});
+// function to add product to cart
+function addToCart(id) {
+    let obj = products[id];
+    let cartobj = (cart.find(e => e.pname == obj.name));
+    let cartindex = (cart.findIndex(e => e.pname == obj.name));
+    if (cartobj != undefined) {
+        cartobj.pquantity = cartobj.pquantity + 1;
+        cartobj.pprice += obj.price;
+        cart[cartindex] = cartobj
+    } else {
+        cart.push({
+            pimage: obj.image,
+            pname: obj.name,
+            pquantity: 1,
+            pprice: obj.price
+        });
+    }
+    totalPrice();
+    checkCart();
+    display();
+}
+// function to calculate the total price of the items in the cart
+function totalPrice() {
+    let total = 0;
+    cart.forEach(element => {
+        total += 1 * element.pprice;
+    });
+    $("#totalPrice").html("Total price: $" + total);
+}
+// function to remove an item from the cart
+function removeItem(id) {
+    let cartobj = cart[id];
+    cart.splice(id, 1);
+    display();
+    totalPrice();
+    checkCart()
+}
+// function to display items of the cart in a table
+function display() {
+    let dis = "";
+    let i = 0;
+    cart.forEach(element => {
+        dis += "<tr><td><img src=" + element.pimage + "></img></td><td>" + element.pname + "</td><td><button id=" + i + " onclick='addOne(this.id)'> + </button>" + " " + element.pquantity + " " + "<button id=" + i + " onclick='removeOne(this.id)'> - </button></td><td>" + "$" + element.pprice + "</td><td><button id=" + i + " onclick='removeItem(this.id)'>Remove item</button></td></tr>";
+        i++;
+    });
+    $("#tbodyCart").html(dis);
+}
+// function to add the quantity of the item by one in cart
+function addOne(id) {
+    let cartobj = cart[id];
+        cartobj.pprice += cartobj.pprice / cartobj.pquantity;
+        cartobj.pquantity += 1;
+        cart[id] = cartobj;
+    display();
+    totalPrice();
+}
+// function to minus the quantity of an item by one in the cart
+function removeOne(id) {
+    let cartobj = cart[id];
+        cartobj.pprice -= cartobj.pprice / cartobj.pquantity;
+        cartobj.pquantity -= 1;
+        cart[id] = cartobj;
+    if (cartobj.pquantity == 0) {
+        removeItem(id);
+    }
+    display();
+    totalPrice();
+    checkCart()
+}
+// function to empty the cart
+function emptyCart() {
+    cart = [];
+    display();
+    totalPrice();
+    checkCart()
+}
+// function to check whether or not the cart is empty
+function checkCart() {
+    if (cart.length > 0) {
+        $("#emptyCart").html("Empty Cart").css({
+            "margin-top": "20px",
+            "margin-left": "1150px",
+            "background-color": "red",
+            "padding": "10px"
+        }).show();
+    }else{
+        $("#emptyCart").hide();
+    }
+}
+
+
+
+
+
+<!-- <h2>9. error_get_last()</h2>
+           
+            // @$undef_var;
+            // echo ($xyz);
+            // $e = error_get_last();
+            // print_r($e);
+            // ?>
+            <!-- database logs -->
+            <!-- <h2>10. Database logs</h2>
+            <form action="#" method="get">
+                <input type="text" name="filename">
+            </form>
+           
+            // if (isset($_GET['filename'])) {
+            //     $filename = $_GET['filename'];
+            //     $host = "mysql-server";
+            //     $uname = "root";
+            //     $pwd = "secret";
+            //     $db = $filename;
+            //     if (!mysqli_connect($host, $uname, $pwd, $db)) {
+            //         trigger_error("Cannot find database", E_USER_ERROR);
+            //     } else {
+            //         trigger_error("Connection Successful", E_USER_NOTICE);
+            //     }
+            // } -->
+             -->
+
+
+
+function regex() {
+  const prob = "24z6 1x23 y369 89a 900b";
+  const patterna = /[a-zA-Z]/;
+  const patternn = "([0-9]+)";
+  const letters = [];
+  const regexArray = prob.split(" ");
+  regexArray.forEach((element) => {
+    let x = element.match(patterna);
+    let y = element.match(patternn);
+    let number =
+      element.substring(0, x.index) +
+      element.substring(x.index + 1, element.length);
+    let char = element.charAt(x.index);
+    letters.push({
+      ele: [char],
+      num: number,
+    });
+  });
+  let ans = "";
+  letters.sort((a, b) => (a.ele > b.ele ? 1 : -1));
+  letters.forEach((element) => {
+    ans += element.num + " ";
+  });
+  document.getElementById("regex").innerHTML = ans;
+}
+regex();
+
+
+
